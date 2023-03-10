@@ -11,7 +11,7 @@ class ga_connect:
     #   Задаём ключ из файла
     
 #     key_path = 'C:\\Users\\kalmukds\\NOTEBOOKs\\projects\\keys\\m2-main-cd9ed0b4e222.json'
-    key_path = 'rising-minutia-372107-3f00351690a6.json'
+    key_path = '/home/dmitri_kalmuk/rising-minutia-372107-3f00351690a6.json'
     credentials = service_account.Credentials.from_service_account_file(key_path,)
     analytics = build('analyticsreporting', 'v4', credentials=credentials)
     

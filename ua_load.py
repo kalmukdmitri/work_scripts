@@ -83,7 +83,7 @@ account = [
  ['connexy_com', '272663387', datetime.date(2022, 8, 5)]
 ]
 
-for acc in test_acc:
+for acc in account:
     print(acc)
     for table in tables:
         table_loaded = acc[0]+'_'+table

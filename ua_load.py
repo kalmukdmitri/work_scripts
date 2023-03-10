@@ -31,8 +31,8 @@ def date_pairs(date1, date2, step= 1):
         pairs.append(pair)
     pairs.reverse()
     return pairs
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "rising-minutia-372107-3f00351690a6.json"
-key_path =  "rising-minutia-372107-3f00351690a6.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "work_scripts/rising-minutia-372107-3f00351690a6.json"
+key_path =  "work_scripts/rising-minutia-372107-3f00351690a6.json"
 gbq_credential = service_account.Credentials.from_service_account_file(key_path,)
 q_schema = 'SELECT * FROM UA_BACKGROUND.INFORMATION_SCHEMA.TABLES;'
 

@@ -31,8 +31,10 @@ def date_pairs(date1, date2, step= 1):
         pairs.append(pair)
     pairs.reverse()
     return pairs
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/home/dmitri_kalmuk/rising-minutia-372107-3f00351690a6.json"
-key_path =  "/home/dmitri_kalmuk/rising-minutia-372107-3f00351690a6.json"
+path = "/home/dmitri_kalmuk/rising-minutia-372107-3f00351690a6.json"
+# path = "rising-minutia-372107-3f00351690a6.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = path
+key_path =  path
 gbq_credential = service_account.Credentials.from_service_account_file(key_path,)
 q_schema = 'SELECT * FROM UA_BACKGROUND.INFORMATION_SCHEMA.TABLES;'
 
@@ -73,14 +75,14 @@ tables  = {'sessions': {'dimetions': [
             'filters': ''}}
 
 account = [   
-['radaris_com', '44576131', datetime.date(2020, 1, 1)],
- ['homeflock_com', '120741846', datetime.date(2020, 1, 1)],
- ['trustoria_com', '99443555', datetime.date(2020, 1, 1)],
- ['phoneowner_com', '88657488', datetime.date(2020, 1, 1)],
- ['rehold_com', '93418606', datetime.date(2020, 1, 1)],
- ['homemetry_com', '123494040', datetime.date(2020, 1, 1)],
- ['bizstanding_com', '108031612', datetime.date(2020, 1, 1)],
- ['connexy_com', '272663387', datetime.date(2020, 1, 1)]
+['radaris_com', '44576131', datetime.date(2022, 1, 1)],
+ ['homeflock_com', '120741846', datetime.date(2022, 1, 1)],
+ ['trustoria_com', '99443555', datetime.date(2022, 1, 1)],
+ ['phoneowner_com', '88657488', datetime.date(2022, 1, 1)],
+ ['rehold_com', '93418606', datetime.date(2022, 1, 1)],
+ ['homemetry_com', '120741846', datetime.date(2022, 1, 1)],
+ ['bizstanding_com', '108031612', datetime.date(2022, 1, 1)],
+ ['connexy_com', '272663387', datetime.date(2022, 1, 1)]
 ]
 
 for acc in account:
@@ -93,7 +95,8 @@ for acc in account:
         if table_loaded in list(bq_tables['table_name']):
             q_date = f'SELECT max(date) as first_dt FROM UA_BACKGROUND.{table_loaded};'
             first_dt = pandas_gbq.read_gbq(q_date, project_id='rising-minutia-372107', credentials=gbq_credential)['first_dt'][0]
-            start_date = datetime.datetime.strptime(first_dt,"%Y-%m-%d").date()  
+            if first_dt:
+                start_date = datetime.datetime.strptime(first_dt,"%Y-%m-%d").date()  
             
         dates_to_load = date_pairs(start_date, datetime.datetime.today().date())
         ga_conc = ga_connect(acc[1])
@@ -101,3 +104,4 @@ for acc in account:
             UA_report2 = ga_conc.report_pd([[dates[0],dates[1]]], tables[table])
             UA_report2['date'] = dates[0]
             UA_report2.to_gbq(f'UA_BACKGROUND.{table_loaded}', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
+            time.sleep(3)

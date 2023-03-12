@@ -73,14 +73,14 @@ tables  = {'sessions': {'dimetions': [
             'filters': ''}}
 
 account = [   
-['radaris_com', '44576131', datetime.date(2011, 4, 8)],
- ['homeflock_com', '120741846', datetime.date(2016, 4, 22)],
- ['trustoria_com', '99443555', datetime.date(2015, 3, 17)],
- ['phoneowner_com', '88657488', datetime.date(2014, 8, 4)],
- ['rehold_com', '93418606', datetime.date(2014, 11, 4)],
- ['homemetry_com', '123494040', datetime.date(2016, 6, 8)],
- ['bizstanding_com', '108031612', datetime.date(2015, 9, 7)],
- ['connexy_com', '272663387', datetime.date(2022, 8, 5)]
+['radaris_com', '44576131', datetime.date(2020, 1, 1)],
+ ['homeflock_com', '120741846', datetime.date(2020, 1, 1)],
+ ['trustoria_com', '99443555', datetime.date(2020, 1, 1)],
+ ['phoneowner_com', '88657488', datetime.date(2020, 1, 1)],
+ ['rehold_com', '93418606', datetime.date(2020, 1, 1)],
+ ['homemetry_com', '123494040', datetime.date(2020, 1, 1)],
+ ['bizstanding_com', '108031612', datetime.date(2020, 1, 1)],
+ ['connexy_com', '272663387', datetime.date(2020, 1, 1)]
 ]
 
 for acc in account:

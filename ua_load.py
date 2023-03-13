@@ -39,13 +39,13 @@ def date_pairs(date1, date2, step= 1):
     return pairs
 
 path = "/home/dmitri_kalmuk/rising-minutia-372107-3f00351690a6.json"
-# path = "rising-minutia-372107-3f00351690a6.json"
+# path = "rising-minutia-372107-3f00351690a6.json"\
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = path
 key_path =  path
 gbq_credential = service_account.Credentials.from_service_account_file(key_path,)
 q_schema = 'SELECT * FROM UA_BACKGROUND.INFORMATION_SCHEMA.TABLES;'
 
-path = "rising-minutia-372107-3f00351690a6.json"
+# path = "rising-minutia-372107-3f00351690a6.json"
 SCOPES = ['https://spreadsheets.google.com/feeds',
           'https://www.googleapis.com/auth/drive']
 credentials = ServiceAccountCredentials.from_json_keyfile_name(path, SCOPES)

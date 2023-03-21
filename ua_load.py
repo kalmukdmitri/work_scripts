@@ -77,38 +77,53 @@ def log_data(message):
 
 
 
-tables  = {'sessions': {'dimetions': [
-                        {'name': 'ga:sourceMedium'},
-                        {'name': 'ga:campaign'},
-                        {'name': 'ga:deviceCategory'},
-                        {'name': 'ga:landingPagePath'},
-                        {'name': 'ga:region'}
-                     ],
-            'metrics':  [
-                     {'expression': 'ga:sessions'},
-                     {'expression': 'ga:users'}
-                     ],
-            'filters': ''},
-'pages': {'dimetions': [
+# tables  = {'sessions': {'dimetions': [
+#                         {'name': 'ga:sourceMedium'},
+#                         {'name': 'ga:campaign'},
+#                         {'name': 'ga:deviceCategory'},
+#                         {'name': 'ga:landingPagePath'},
+#                         {'name': 'ga:region'}
+#                      ],
+#             'metrics':  [
+#                      {'expression': 'ga:sessions'},
+#                      {'expression': 'ga:users'}
+#                      ],
+#             'filters': ''},
+# 'pages': {'dimetions': [
+#                         {'name': 'ga:pagePath'},
+#                         {'name': 'ga:deviceCategory'},
+#                      ],
+#             'metrics':  [
+#                      {'expression': 'ga:timeOnPage'},
+#                      {'expression': 'ga:exits'},
+#                      {'expression': 'ga:pageviews'}
+#                      ],
+#             'filters': ''},
+# 'events': {'dimetions': [
+#                         {'name': 'ga:eventCategory'},
+#                         {'name': 'ga:eventAction'},
+#                         {'name': 'ga:eventLabel'},
+#                         {'name': 'ga:deviceCategory'}
+#                      ],
+#             'metrics':   [
+#                      {'expression': 'ga:totalEvents'},
+#                      {'expression': 'ga:uniqueEvents'},
+#                      {'expression': 'ga:sessionsWithEvent'}
+#                      ],
+#             'filters': ''}}
+
+
+
+tables  = {'ads': {'dimetions': [
+                         {'name': 'ga:date'},
                         {'name': 'ga:pagePath'},
                         {'name': 'ga:deviceCategory'},
                      ],
             'metrics':  [
-                     {'expression': 'ga:timeOnPage'},
-                     {'expression': 'ga:exits'},
-                     {'expression': 'ga:pageviews'}
-                     ],
-            'filters': ''},
-'events': {'dimetions': [
-                        {'name': 'ga:eventCategory'},
-                        {'name': 'ga:eventAction'},
-                        {'name': 'ga:eventLabel'},
-                        {'name': 'ga:deviceCategory'}
-                     ],
-            'metrics':   [
-                     {'expression': 'ga:totalEvents'},
-                     {'expression': 'ga:uniqueEvents'},
-                     {'expression': 'ga:sessionsWithEvent'}
+                     {'expression': 'ga:adsenseRevenue'},
+                     {'expression': 'ga:adsenseAdsViewed'},
+                     {'expression': 'ga:adsenseAdsClicks'}
+                
                      ],
             'filters': ''}}
 

@@ -127,27 +127,16 @@ tables  = {'ads': {'dimetions': [
                      ],
             'filters': ''}}
 
-#account = [   
-#['radaris_com', '44576131', datetime.date(2022, 1, 1)],
-# ['homeflock_com', '120741846', datetime.date(2022, 1, 1)],
-# ['trustoria_com', '99443555', datetime.date(2022, 1, 1)],
-# ['phoneowner_com', '88657488', datetime.date(2022, 1, 1)],
-# ['rehold_com', '93418606', datetime.date(2022, 1, 1)],
-# ['homemetry_com', '120741846', datetime.date(2022, 1, 1)],
-# ['bizstanding_com', '108031612', datetime.date(2022, 1, 1)],
-# ['connexy_com', '272663387', datetime.date(2022, 1, 1)]
-#]
-
 account = [   
+['radaris_com', '44576131', datetime.date(2022, 1, 1)],
  ['homeflock_com', '120741846', datetime.date(2022, 1, 1)],
+ ['trustoria_com', '99443555', datetime.date(2022, 1, 1)],
+ ['phoneowner_com', '88657488', datetime.date(2022, 1, 1)],
+ ['rehold_com', '93418606', datetime.date(2022, 1, 1)],
  ['homemetry_com', '120741846', datetime.date(2022, 1, 1)],
+ ['bizstanding_com', '108031612', datetime.date(2022, 1, 1)],
+ ['connexy_com', '272663387', datetime.date(2022, 1, 1)]
 ]
-
-
-
-
-
-
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name(path, SCOPES)
 gc = gspread.authorize(credentials)

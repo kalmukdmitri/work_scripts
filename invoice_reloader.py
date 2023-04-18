@@ -14,7 +14,11 @@ import string
 from google.cloud import bigquery
 import sys
 
-key_path = "rising-minutia-372107-3f00351690a6.json"
+# key_path = "rising-minutia-372107-3f00351690a6.json"
+key_path = "/home/dima.k/rising-minutia-372107-3f00351690a6.json"
+
+
+
 
 gbq_credential = service_account.Credentials.from_service_account_file(key_path,)
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly',

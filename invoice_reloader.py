@@ -141,3 +141,24 @@ product_description = query_df(q, iterate = False)
 for i in product_description:
     product_description[i] = product_description[i].astype(str)
 product_description.to_gbq('ALL_SALES.product_description', project_id='rising-minutia-372107',chunksize=20000, if_exists='replace', credentials=gbq_credential)
+
+    
+q = f"""SELECT  MAX(id) as date FROM `rising-minutia-372107.Radaris.mail_report` """
+last_dt = pandas_gbq.read_gbq(q, project_id='rising-minutia-372107', credentials=gbq_credential) 
+last_invoice = last_dt['date'][0]
+
+q = f'''select count(*) as len_cnt from rd_marketing.reunion  
+where id > {last_invoice} '''
+invoices_len = query_df(q, iterate = False)
+
+invoices_len = invoices_len.len_cnt[0]
+q = f'''select * from rd_marketing.reunion  
+where id > {last_invoice} '''
+
+if invoices_len > 10000:
+    invoices = query_df(q, iterate = True, chunk = 10000,iterations = int(invoices_len/10000)+1)
+else:
+    invoices = query_df(q, iterate = False)
+mails = invoices.copy()
+mails = mails.drop(columns = ['data'])
+mails.to_gbq('Radaris.mail_report', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)

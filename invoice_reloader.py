@@ -162,3 +162,30 @@ else:
 mails = invoices.copy()
 mails = mails.drop(columns = ['data'])
 mails.to_gbq('Radaris.mail_report', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
+
+quarter_ago = str((datetime.datetime.today() - datetime.timedelta(days = 90)).date())
+
+q = f'''
+select 
+
+id,
+status,
+created_on
+
+from invoice 
+    where (status != 'complete'
+or fake != 0)
+and created_on > '{quarter_ago}'
+'''
+invoices_fails = query_df(q, iterate = False)
+
+bigquery_client = bigquery.Client.from_service_account_json(key_path)
+
+q = f"""
+    delete from ALL_SALES.invoices_fails
+    where created_on > '{quarter_ago}'
+"""
+job = bigquery_client.query(q)
+
+invoices_fails.to_gbq('ALL_SALES.invoices_fails', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
+

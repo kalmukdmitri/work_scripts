@@ -27,12 +27,12 @@ SCOPES = ['https://www.googleapis.com/auth/analytics.readonly',
 credentials = ServiceAccountCredentials.from_json_keyfile_name(key_path, SCOPES)
 bigquery_client = bigquery.Client.from_service_account_json(key_path)
 
-def query_df(qry, iterate = False, chunk = 5000,iterations = 0):
+def query_df(qry, iterate = False, chunk = 5000,iterations = 0, database = 'hb_acct'):
     cnx = mysql.connect(
     user='guest',
     password='vgFms7-kTl',
     host='172.16.5.71',
-    database='hb_acct')
+    database=database)
     
     if not iterate:
         cursor = cnx.cursor()
@@ -135,8 +135,10 @@ for i in invoice_data_processed:
 invoice_data_processed['invoice_id'] = invoice_data_processed['invoice_id'].astype(int)
 invoice_data_processed.to_gbq('ALL_SALES.invoices_data', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
 
-q = f'''select * from hb_ref.product  '''
-product_description = query_df(q, iterate = False)
+
+
+q = f'''select * from product  '''
+product_description = query_df(q, iterate = False , database = 'hb_ref')
 
 for i in product_description:
     product_description[i] = product_description[i].astype(str)
@@ -147,18 +149,18 @@ q = f"""SELECT  MAX(id) as date FROM `rising-minutia-372107.Radaris.mail_report`
 last_dt = pandas_gbq.read_gbq(q, project_id='rising-minutia-372107', credentials=gbq_credential) 
 last_invoice = last_dt['date'][0]
 
-q = f'''select count(*) as len_cnt from rd_marketing.reunion  
+q = f'''select count(*) as len_cnt from reunion  
 where id > {last_invoice} '''
-invoices_len = query_df(q, iterate = False)
+invoices_len = query_df(q, iterate = False, database = 'rd_marketing')
 
 invoices_len = invoices_len.len_cnt[0]
 q = f'''select * from rd_marketing.reunion  
 where id > {last_invoice} '''
 
 if invoices_len > 10000:
-    invoices = query_df(q, iterate = True, chunk = 10000,iterations = int(invoices_len/10000)+1)
+    invoices = query_df(q, iterate = True, chunk = 10000,iterations = int(invoices_len/10000)+1, database = 'rd_marketing')
 else:
-    invoices = query_df(q, iterate = False)
+    invoices = query_df(q, iterate = False, database = 'rd_marketing')
 mails = invoices.copy()
 mails = mails.drop(columns = ['data'])
 mails.to_gbq('Radaris.mail_report', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
@@ -188,4 +190,3 @@ q = f"""
 job = bigquery_client.query(q)
 
 invoices_fails.to_gbq('ALL_SALES.invoices_fails', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
-

@@ -14,7 +14,7 @@ from google.oauth2.credentials import Credentials
 from oauth2client.service_account import ServiceAccountCredentials
 from google.oauth2 import service_account
 
-key_path = "rising-minutia-372107-3f00351690a6.json"
+key_path = "/home/dima.k/rising-minutia-372107-3f00351690a6.json"
 
 gbq_credential = service_account.Credentials.from_service_account_file(key_path,)
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly',
@@ -23,7 +23,9 @@ SCOPES = ['https://www.googleapis.com/auth/analytics.readonly',
 credentials = ServiceAccountCredentials.from_json_keyfile_name(key_path, SCOPES)
 bigquery_client = bigquery.Client.from_service_account_json(key_path)
 
-f = open('token.json', "r")
+
+key_path_token = "/home/dima.k/token.json"
+f = open(key_path_token, "r")
 key_other = f.read()
 body = json.loads(key_other)
 

@@ -72,6 +72,7 @@ def query_df(qry, iterate = False, chunk = 5000,iterations = 0, database = 'hb_a
         cnx.close()
         return pd.concat(final_pd).reset_index(drop=True)
         
+print('Start invoice')
 q = f"""SELECT  MAX(id) as date FROM `rising-minutia-372107.ALL_SALES.invoices_raw` """
 last_dt = pandas_gbq.read_gbq(q, project_id='rising-minutia-372107', credentials=gbq_credential) 
 last_invoice = last_dt['date'][0]
@@ -94,12 +95,17 @@ invoices['refund_on']= invoices['refund_on'].astype(str)
 
 invoices.to_gbq('ALL_SALES.invoices_raw', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
 
+print('end invoice,data start')
+
 q = f'''
 select * from invoice_data
 where invoice_id >= {min(invoices['id'])}
 and invoice_id <= {max(invoices['id'])}
 '''
-invoice_data = query_df(q, iterate = True, chunk = 5000,iterations = int(invoices_len/5000)+1 )
+invoice_data = query_df(q, iterate = True, chunk = 5000,iterations = int(invoices_len/5000)+1)
+
+
+
 invoice_data['data'] = invoice_data['data'].apply(lambda x: json.loads(x))
 pre_done = []
 for rawrow in invoice_data.itertuples():
@@ -138,7 +144,7 @@ for i in invoice_data_processed:
 invoice_data_processed['invoice_id'] = invoice_data_processed['invoice_id'].astype(int)
 invoice_data_processed.to_gbq('ALL_SALES.invoices_data', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
 
-
+print('end data,data product')
 
 q = f'''select * from product  '''
 product_description = query_df(q, iterate = False , database = 'hb_ref')

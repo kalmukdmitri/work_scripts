@@ -21,6 +21,7 @@ key_path_token = "/home/dima.k/sql.json"
 f = open(key_path_token, "r")
 key_other = f.read()
 keys = json.loads(key_other)
+print(keys)
 
 gbq_credential = service_account.Credentials.from_service_account_file(key_path,)
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly',

@@ -17,8 +17,10 @@ import sys
 # key_path = "rising-minutia-372107-3f00351690a6.json"
 key_path = "/home/dima.k/rising-minutia-372107-3f00351690a6.json"
 
-
-
+key_path_token = "/home/dima.k/sql.json"
+f = open(key_path_token, "r")
+key_other = f.read()
+keys = json.loads(key_other)
 
 gbq_credential = service_account.Credentials.from_service_account_file(key_path,)
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly',
@@ -27,11 +29,11 @@ SCOPES = ['https://www.googleapis.com/auth/analytics.readonly',
 credentials = ServiceAccountCredentials.from_json_keyfile_name(key_path, SCOPES)
 bigquery_client = bigquery.Client.from_service_account_json(key_path)
 
-def query_df(qry, iterate = False, chunk = 5000,iterations = 0, database = 'hb_acct'):
+def query_df(qry, iterate = False, chunk = 5000,iterations = 0, database = 'hb_acct',keys=keys):
     cnx = mysql.connect(
-    user='guest',
-    password='vgFms7-kTl',
-    host='172.16.5.71',
+    user=keys['user'],
+    password=keys['password'],
+    host=keys['host'],
     database=database)
     
     if not iterate:
@@ -152,13 +154,13 @@ last_invoice = last_dt['date'][0]
 q = f'''select count(*) as len_cnt from reunion  
 where id > {last_invoice} '''
 invoices_len = query_df(q, iterate = False, database = 'rd_marketing')
+print(len(invoices_len), 'Marketing_reunion_raws')
+reunion_len = invoices_len.len_cnt[0]
+                                   
+q = f'''select * from reunion  where id > {last_invoice} '''
 
-invoices_len = invoices_len.len_cnt[0]
-q = f'''select * from rd_marketing.reunion  
-where id > {last_invoice} '''
-
-if invoices_len > 10000:
-    invoices = query_df(q, iterate = True, chunk = 10000,iterations = int(invoices_len/10000)+1, database = 'rd_marketing')
+if reunion_len > 10000:
+    invoices = query_df(q, iterate = True, chunk = 10000,iterations = int(reunion_len/10000)+1, database = 'rd_marketing')
 else:
     invoices = query_df(q, iterate = False, database = 'rd_marketing')
 mails = invoices.copy()
@@ -169,11 +171,9 @@ quarter_ago = str((datetime.datetime.today() - datetime.timedelta(days = 90)).da
 
 q = f'''
 select 
-
 id,
 status,
 created_on
-
 from invoice 
     where (status != 'complete'
 or fake != 0)

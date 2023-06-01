@@ -104,8 +104,6 @@ and invoice_id <= {max(invoices['id'])}
 '''
 invoice_data = query_df(q, iterate = True, chunk = 5000,iterations = int(invoices_len/5000)+1)
 
-
-
 invoice_data['data'] = invoice_data['data'].apply(lambda x: json.loads(x))
 pre_done = []
 for rawrow in invoice_data.itertuples():
@@ -144,10 +142,12 @@ for i in invoice_data_processed:
 invoice_data_processed['invoice_id'] = invoice_data_processed['invoice_id'].astype(int)
 invoice_data_processed.to_gbq('ALL_SALES.invoices_data', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
 
-print('end data,data product')
+print('end data, start product')
 
-q = f'''select * from product  '''
-product_description = query_df(q, iterate = False , database = 'hb_ref')
+q = f'''select id, active, active2, cname, title, stat_cnt, stat_amt, expense_type, amount, discount, subscription, subscription_activation, description, description_full,
+created, updated from product'''
+
+product_description = query_df(q, iterate = False , database='hb_ref')
 
 for i in product_description:
     product_description[i] = product_description[i].astype(str)

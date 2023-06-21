@@ -1,7 +1,7 @@
 # work_scripts
 Python verion Python 3.8.8
-
-Full Requirments to Run:
+**
+Full Requirments to Run:**
 
 pip install mysql-connector-python
 

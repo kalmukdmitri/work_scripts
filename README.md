@@ -1,7 +1,9 @@
-# work_scripts
-Python verion Python 3.8.8
-**
-Full Requirments to Run:**
+### Full Requirments to Run:
+
+Python verion:  Python 3.8.8
+
+#### Libraries:
+Full Requirments to Run:
 
 pip install mysql-connector-python
 
@@ -18,10 +20,10 @@ pip install gspread
 pip install google-cloud-bigquery
 
 
+#### Files and what they do:
 
+ga4.py - GA4 API service Class - needed for GA4 parsing
 
-ga4.py - GA4 API service Class - needs development
-
-adsense.py - Adsense API Full script - parses and loads data to Bigquery
+adsense.py - Adsense API Full script - parses API data and loads data to Bigquery
 
 invoice_reloader.py - Full procedure to read data from MySQL on premise and load it onto BigQuery

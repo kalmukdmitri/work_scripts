@@ -30,6 +30,9 @@ SCOPES = ['https://www.googleapis.com/auth/analytics.readonly',
 credentials = ServiceAccountCredentials.from_json_keyfile_name(key_path, SCOPES)
 bigquery_client = bigquery.Client.from_service_account_json(key_path)
 
+# Intup SQL query for MySQL inpremise, mySQL db relevant for the query.
+# Also iterate and chank are used to load data in small protions, not to crash MySQl
+
 def query_df(qry, iterate = False, chunk = 5000,iterations = 0, database = 'hb_acct',keys=keys):
     cnx = mysql.connect(
     user=keys['user'],
@@ -142,7 +145,7 @@ for i in invoice_data_processed:
 invoice_data_processed['invoice_id'] = invoice_data_processed['invoice_id'].astype(int)
 invoice_data_processed.to_gbq('ALL_SALES.invoices_data', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
 
-print('end data, start product')
+print('end data, start product' )
 
 q = f'''select id, active, active2, cname, title, stat_cnt, stat_amt, expense_type, amount, discount, subscription, subscription_activation, description, description_full,
 created, updated from product'''
@@ -197,3 +200,24 @@ q = f"""
 job = bigquery_client.query(q)
 
 invoices_fails.to_gbq('ALL_SALES.invoices_fails', project_id='rising-minutia-372107',chunksize=20000, if_exists='append', credentials=gbq_credential)
+
+
+q = f'''select count(*) as len_cnt from invoice 
+where status = 'chargeback' '''
+invoices_len = query_df(q, iterate = False)
+invoices_len = invoices_len.len_cnt[0]
+
+q = f'''
+select 
+id,
+status,
+created_on
+from invoice 
+    where status = 'chargeback'
+'''
+
+if invoices_len > 10000:
+    invoices = query_df(q, iterate = True, chunk = 10000,iterations = int(invoices_len/10000)+1)
+else:
+    invoices = query_df(q, iterate = False)
+invoices.to_gbq('ALL_SALES.invoices_chargeback', project_id='rising-minutia-372107',chunksize=20000, if_exists='replace', credentials=gbq_credential)

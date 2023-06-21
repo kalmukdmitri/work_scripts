@@ -29,12 +29,15 @@ f = open(key_path_token, "r")
 key_other = f.read()
 body = json.loads(key_other)
 
+
+# Get new token from refresh token
 token_req_test = f'https://www.googleapis.com/oauth2/v4/token'
 credentials = requests.post(token_req_test,data=body ).json()
 
 creds = Credentials(credentials['access_token'])
 service = build('adsense', 'v2', credentials=creds)
 
+# Input - Date of refresh start - outpurt pandas with adsense data for period from start date to today
 def get_report(start):
     
     end = datetime.datetime.today() - datetime.timedelta(days=1)

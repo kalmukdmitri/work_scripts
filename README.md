@@ -27,3 +27,11 @@ ga4.py - GA4 API service Class - needed for GA4 parsing
 adsense.py - Adsense API Full script - parses API data and loads data to Bigquery
 
 invoice_reloader.py - Full procedure to read data from MySQL on premise and load it onto BigQuery
+#### Update Schedule:
+
+adsense.py - Daily
+invoice_reloader.py - once per hour
+
+
+
+
